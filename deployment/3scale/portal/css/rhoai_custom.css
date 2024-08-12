@@ -1,0 +1,12 @@
+.api_key_display {
+    border: none;
+    display: inline;
+    font-family: inherit;
+    font-size: inherit;
+    width: 276px;
+    background: none;
+}
+
+.td_api_key {
+    width: 360px;
+}

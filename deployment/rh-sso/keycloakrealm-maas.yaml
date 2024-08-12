@@ -1,0 +1,13 @@
+apiVersion: keycloak.org/v1alpha1
+kind: KeycloakRealm
+metadata:
+  name: mass
+spec:
+  instanceSelector:
+    matchLabels:
+      app: rh-sso
+  realm:
+    id: maas
+    realm: maas
+    displayName: "MaaS on RHOAI"
+    enabled: true

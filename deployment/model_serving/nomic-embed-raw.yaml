@@ -1,0 +1,81 @@
+---
+apiVersion: serving.kserve.io/v1alpha1
+kind: ServingRuntime
+metadata:
+  annotations:
+    opendatahub.io/accelerator-name: medium-gpu-card
+    opendatahub.io/apiProtocol: REST
+    openshift.io/display-name: "TEI-GPU"
+    opendatahub.io/template-display-name: TEI-GPU
+    opendatahub.io/template-name: tei-gpu
+  name: tei-gpu
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  builtInAdapter:
+    modelLoadingTimeoutMillis: 90000
+  containers:
+    - args:
+        - "--model-id=/mnt/models/"
+        - "--port=8080"
+      image: 'ghcr.io/huggingface/text-embeddings-inference:turing-1.5'
+      name: kserve-container
+      env:
+      - name: HF_HOME
+        value: /tmp/hf_home
+      - name: HUGGINGFACE_HUB_CACHE
+        value: /tmp/hf_hub_cache
+      - name: TRANSFORMER_CACHE
+        value: /tmp/transformers_cache
+      ports:
+        - containerPort: 8080
+          name: http1
+          protocol: TCP
+      volumeMounts:
+        - mountPath: /dev/shm
+          name: shm
+  multiModel: false
+  supportedModelFormats:
+    - autoSelect: true
+      name: sbert
+  volumes:
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 2Gi
+      name: shm
+---
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    openshift.io/display-name: Nomic-embed-text-v1.5
+    serving.kserve.io/deploymentMode: RawDeployment
+  name: nomic-embed-text-v1-5
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  predictor:
+    maxReplicas: 1
+    minReplicas: 1
+    model:
+      modelFormat:
+        name: sbert
+      name: ''
+      resources:
+        limits:
+          cpu: '2'
+          memory: 8Gi
+          nvidia.com/gpu: '1'
+        requests:
+          cpu: '1'
+          memory: 4Gi
+          nvidia.com/gpu: '1'
+      runtime: tei-gpu
+      storage:
+        key: aws-connection-models
+        path: nomic-ai/nomic-embed-text-v1.5/
+    tolerations:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+        operator: Equal
+        value: 'Tesla-T4-SHARED'

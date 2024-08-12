@@ -1,0 +1,26 @@
+apiVersion: apps.3scale.net/v1alpha1
+kind: APIManager
+metadata:
+  name: apimanager
+  namespace: 3scale
+spec:
+  wildcardDomain: apps.prod.rhoai.rh-aiservices-bu.com # Change this to your wildcard domain
+  resourceRequirementsEnabled: false
+  tenantName: maas
+  system:
+    fileStorage:
+      persistentVolumeClaim:
+        storageClassName: ocs-storagecluster-cephfs
+  apicast:
+    stagingSpec:
+      customPolicies:
+        - name: remove-bearer
+          version: "0.1"
+          secretRef:
+             name: cp-bearer
+    productionSpec:
+      customPolicies:
+        - name: remove-bearer
+          version: "0.1"
+          secretRef:
+             name: cp-bearer

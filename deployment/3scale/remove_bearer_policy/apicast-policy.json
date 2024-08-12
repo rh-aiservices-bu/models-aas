@@ -1,0 +1,11 @@
+{
+    "$schema": "http://apicast.io/policy-v1/schema#manifest#",
+    "name": "Removes Bearer from Authorization Policy",
+    "summary": "Removes 'Bearer' in Authorization header.",
+    "description": "This policy removes 'Bearer' sent in an Authorization header so that the api_key is recognized as a token.",
+    "version": "0.1",
+    "configuration": {
+      "type": "object",
+      "properties": { }
+    }
+  }

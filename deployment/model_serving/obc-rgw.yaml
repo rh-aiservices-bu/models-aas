@@ -1,0 +1,7 @@
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: models
+spec:
+  generateBucketName: models
+  storageClassName: ocs-storagecluster-ceph-rgw

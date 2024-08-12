@@ -1,0 +1,84 @@
+---
+apiVersion: serving.kserve.io/v1alpha1
+kind: ServingRuntime
+metadata:
+  annotations:
+    opendatahub.io/apiProtocol: REST
+    opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
+    openshift.io/display-name: "vLLM-RHOAI 2.12-max-len: 6144"
+    opendatahub.io/template-display-name: "vLLM-RHOAI 2.12-max-len: 6144"
+    opendatahub.io/template-name: vllm-2.12-6144
+  name: vllm-2.12-6144
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  annotations:
+    prometheus.io/path: /metrics
+    prometheus.io/port: '8080'
+  containers:
+    - args:
+        - --port=8080
+        - --model=/mnt/models
+        - --served-model-name={{.Name}}
+        - --distributed-executor-backend=mp
+        - --max-model-len=6144
+      command:
+        - python
+        - '-m'
+        - vllm.entrypoints.openai.api_server
+      env:
+        - name: HF_HOME
+          value: /tmp/hf_home
+      image: 'quay.io/modh/vllm:rhoai-2.12'
+      name: kserve-container
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      volumeMounts:
+        - mountPath: /dev/shm
+          name: shm
+  multiModel: false
+  supportedModelFormats:
+    - autoSelect: true
+      name: vLLM
+  volumes:
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 2Gi
+      name: shm
+---
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    openshift.io/display-name: Granite-8b-code-instruct-128k
+    serving.kserve.io/deploymentMode: RawDeployment
+  name: granite-8b-code-instruct-128k
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  predictor:
+    maxReplicas: 1
+    minReplicas: 1
+    model:
+      modelFormat:
+        name: vLLM
+      name: ''
+      resources:
+        limits:
+          cpu: '8'
+          memory: 24Gi
+          nvidia.com/gpu: '1'
+        requests:
+          cpu: '4'
+          memory: 16Gi
+          nvidia.com/gpu: '1'
+      runtime: vllm-2.12-6144
+      storage:
+        key: aws-connection-models
+        path: ibm-granite/granite-8b-code-instruct-128k/
+    tolerations:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+        operator: Equal
+        value: 'NVIDIA-A10G-SHARED'
