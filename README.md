@@ -9,15 +9,19 @@ Further implementation could feature quotas, rate limits, different plans, billi
 ## Screenshots
 
 Portal:
+
 ![portal.png](img/portal.png)
 
 Services:
+
 ![services.png](img/services.png)
 
 Service detail:
+
 ![service_detail.png](img/service_detail.png)
 
 Statistics:
+
 ![traffic.png](img/traffic.png)
 
 ## Deployment
@@ -32,13 +36,17 @@ The following is an example on how to copy and serve models using OpenShift AI. 
 - Switch to OpenShift AI dashboard and create a Data Connection `models` with the information from the OBC.
     ![add_data_connection.png](img/add_data_connection.png)
 - In OpenShift AI, under any of your projects, create and launch an [ODH-TEC](https://github.com/opendatahub-io-contrib/odh-tec) workbench using the above data connection:
+
     ![odh-tec-1.png](img/odh-tec-1.png)
+
     ![odh-tec-2.png](img/odh-tec-2.png)
 - Using ODH-TEC, import the following models from HuggingFace (don't forget to enter your HuggingFace Token in ODH-TEC Settings!):
   - [Granite-8B-Code-Instruct-128K](https://huggingface.co/ibm-granite/granite-8b-code-instruct-128k)
   - [Mistral-7B-Instruct-v0.3](https://huggingface.co/mistralai/Mistral-7B-Instruct-v0.3)
   - [Nomic-embed-text-v1.5](https://huggingface.co/nomic-ai/nomic-embed-text-v1.5)
+
     ![import-granite-1.png](img/import-granite-1.png)
+
     ![import-granite-2.png](img/import-granite-2.png)
 - From the OpenShift Console, deploy the different model servers using the following RuntimeConfigurations and InferenceServers:
   - [Granite-8B-Code-Instruct-128K](./deployment/model_serving/granite-code-vllm-raw.yaml)
@@ -117,7 +125,6 @@ In this example we are using Red Hat SSO as the authentication backend for the 3
   - In Overview, adjust the Account Details to your provider name and Timezone.
 
     ![account_details.png](img/account_details.png)
-
 - Let's start by doing some cleanup:
   - In the `Products` section, click on the default `API` product:
 
@@ -136,6 +143,7 @@ In this example we are using Red Hat SSO as the authentication backend for the 3
 
     ![new-backend-granite.png](img/new-backend-granite.png)
   - Do the same for the other models/endpoints.
+
     ![all-backends.png](img/all-backends.png)
 - We can now create the `Products`. There will be one for each Backend.
 
@@ -180,7 +188,8 @@ In this example we are using Red Hat SSO as the authentication backend for the 3
   - Realm: `https://keycloak-rh-sso.apps.prod.rhoai.rh-aiservices-bu.com/auth/realms/maas` (adjust to your cluster domain name).
   - `Published` ticked.
   - Once created, edit the RH-SSO to tick the checkbox `Always approve accounts...`
-  ![3scale_sso.png](img/3scale_sso.png)
+
+    ![3scale_sso.png](img/3scale_sso.png)
   - You can now test the authentication flow.
 
 ##### Portal content
