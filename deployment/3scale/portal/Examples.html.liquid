@@ -85,7 +85,7 @@ Configuration in <code>.continue/config.json</code>
 <pre>
 <code>
 ...
-"models": [
+  "models": [
     {
       "title": "Granite-8B-Instruct",
       "provider": "openai",
@@ -93,15 +93,16 @@ Configuration in <code>.continue/config.json</code>
       "apiBase": "https://granite-8b-code-instruct-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443/v1/",
       "apiKey": "************************",
       "completionOptions": {
-      "temperature": 0.1,
-      "topK": 1,
-      "topP": 1,
-      "presencePenalty": 0,
-      "frequencyPenalty": 0
+        "temperature": 0.1,
+        "topK": 1,
+        "topP": 1,
+        "presencePenalty": 0,
+        "frequencyPenalty": 0
       }
     }
+  ]
 ...
-"tabAutocompleteModel": {
+  "tabAutocompleteModel": {
     "title": "Granite-8B-Instruct",
     "provider": "openai",
     "model": "granite-8b-code-instruct-128k",
@@ -139,7 +140,7 @@ curl -X 'POST' \
   "normalize": true,
   "truncate": false,
   "truncation_direction": "Right"
-}' 
+}'
 </code>
 </pre>
 <h3>Using raw Python</h3>
@@ -208,4 +209,20 @@ embeddings = embeddings_model.embed_documents(test_strings)
 
 print(embeddings)
     </code>
+</pre>
+
+<h3>Connecting Continue.dev to Nomic-Embed-Text</h3>
+Configuration in <code>.continue/config.json</code>
+<pre>
+<code>
+...
+  "embeddingsProvider": {
+    "title": "Nomic-embed-text-v1.5",
+    "provider": "openai",
+    "model": "/mnt/models",
+    "apiBase": "https://nomic-embed-text-v1-5-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443/v1/",
+    "apiKey": "*************************"
+  },
+...
+</code>
 </pre>
