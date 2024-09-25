@@ -219,9 +219,10 @@ Configuration in <code>.continue/config.json</code>
   "embeddingsProvider": {
     "title": "Nomic-embed-text-v1.5",
     "provider": "openai",
-    "model": "/mnt/models",
+    "model": "nomic-embed-text-v1.5",
     "apiBase": "https://nomic-embed-text-v1-5-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443/v1/",
-    "apiKey": "*************************"
+    "apiKey": "*************************",
+    "maxBatchSize": 32
   },
 ...
 </code>
