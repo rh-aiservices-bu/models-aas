@@ -6,6 +6,10 @@ Although not a reference architecture (there are many ways to implement this typ
 
 Further implementation could feature quotas, rate limits, different plans, billing,...
 
+## Architecture Overview
+
+![architecture](docs/architecture.drawio.svg)
+
 ## Screenshots
 
 Portal:
