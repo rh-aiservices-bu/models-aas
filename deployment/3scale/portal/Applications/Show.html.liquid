@@ -81,6 +81,10 @@
                 mistral-7b-instruct
               {% elsif application.service.system_name == 'nomic-embed-text-v1-5' %}
                 /mnt/models
+              {% elsif application.service.system_name == 'granite-3-8b-instruct' %}
+                granite-8b-instruct
+              {% elsif application.service.system_name == 'docling' %}
+                Not needed
               {% endif %}
 				</code>
             <i class="fa fa-lg fa-copy" onclick="copyToClipboard('model_name', 'Model Name')"></i>
@@ -90,11 +94,10 @@
               <input id="key_{{ application.id }}" type="password" readOnly="true" class="api_key_display" value="{{ application.user_key }}" />
                   <i class="fa fa-lg fa-eye-slash" onclick="toggleVisibility('key_{{ application.id }}')"></i>
                   <i class="fa fa-lg fa-copy" onclick="copyToClipboard('key_{{ application.id }}', 'API Key')"></i>
-              <p class="help-block"> Add this as a <code>api_key</code>
-                parameter to your API calls to
-                authenticate.</p>
-                              {% if application.can.regenerate_user_key? %}
-                   {{ 'Regenerate' | update_button: application.update_user_key_url, class: 'btn btn-danger btn-xs' }}
+                  <p class="help-block"> Add this as an <code>api_key</code>
+                  parameter to your API calls or use it as an Authorization Bearer token.</p>
+                                {% if application.can.regenerate_user_key? %}
+                     {{ 'Regenerate' | update_button: application.update_user_key_url, class: 'btn btn-danger btn-xs' }}
               {% endif %}
             </dd>        
           {% elsif application.oauth_mode? %}
