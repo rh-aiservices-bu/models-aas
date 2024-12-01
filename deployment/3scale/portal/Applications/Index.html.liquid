@@ -19,7 +19,8 @@
         </tr>
       </thead>
       <tbody class="panel-body">
-        {% for application in applications %}
+        {% assign sorted_applications = applications | sort: 'name' %}
+        {% for application in sorted_applications %}
           <tr class="{% cycle 'applications': 'odd', 'even' %}" id="application_{{ application.id }}">
             <td>
               {{ application.name | link_to: application.url }}

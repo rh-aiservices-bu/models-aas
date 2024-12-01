@@ -1,0 +1,546 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Docling",
+        "description": "Docling parses documents and exports them to the desired format with ease and speed."
+    },
+    "paths": {
+        "/health": {
+            "get": {
+                "summary": "Health",
+                "description": "Basic status",
+                "operationId": "health_health_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/process_url": {
+            "post": {
+                "summary": "Process Url",
+                "operationId": "process_url_process_url_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/DoclingParameters"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/process_file": {
+            "post": {
+                "summary": "Process File",
+                "operationId": "process_file_process_file_post",
+                "parameters": [
+                    {
+                        "name": "ocr",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "boolean"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": true,
+                            "title": "Ocr"
+                        }
+                    },
+                    {
+                        "name": "force_ocr",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "boolean"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": false,
+                            "title": "Force Ocr"
+                        }
+                    },
+                    {
+                        "name": "ocr_engine",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string",
+                                    "pattern": "easyocr|tesseract_cli|tesseract"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": "easyocr",
+                            "title": "Ocr Engine"
+                        }
+                    },
+                    {
+                        "name": "pdf_backend",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string",
+                                    "pattern": "pypdfium2|dlparse_v1|dlparse_v2"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": "dlparse_v1",
+                            "title": "Pdf Backend"
+                        }
+                    },
+                    {
+                        "name": "table_mode",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string",
+                                    "pattern": "fast|accurate"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": "fast",
+                            "title": "Table Mode"
+                        }
+                    },
+                    {
+                        "name": "abort_on_error",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "boolean"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": false,
+                            "title": "Abort On Error"
+                        }
+                    },
+                    {
+                        "name": "return_as_file",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "boolean"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": false,
+                            "title": "Return As File"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Body_process_file_process_file_post"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Body_process_file_process_file_post": {
+                "properties": {
+                    "files": {
+                        "items": {
+                            "type": "string",
+                            "format": "binary"
+                        },
+                        "type": "array",
+                        "title": "Files"
+                    },
+                    "from_format": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "From Format",
+                        "default": [
+                            "pdf",
+                            "docx",
+                            "pptx",
+                            "html",
+                            "image",
+                            "asciidoc",
+                            "md"
+                        ]
+                    },
+                    "to_format": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "To Format",
+                        "default": [
+                            "md"
+                        ]
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "files"
+                ],
+                "title": "Body_process_file_process_file_post"
+            },
+            "DoclingParameters": {
+                "properties": {
+                    "from_format": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "From Format",
+                        "description": "Input format(s) to convert from. String or list of strings. Allowed values: docx, pptx, html, image, pdf, asciidoc, md. Optional, defaults to all formats.",
+                        "default": [
+                            "pdf",
+                            "docx",
+                            "pptx",
+                            "html",
+                            "image",
+                            "asciidoc",
+                            "md"
+                        ],
+                        "examples": [
+                            [
+                                "pdf",
+                                "docx"
+                            ]
+                        ]
+                    },
+                    "to_format": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "To Format",
+                        "description": "Output format(s) to convert to. String or list of strings. Allowed values: md, json, text, doctags. Optional, defaults to Markdown.",
+                        "default": [
+                            "md"
+                        ],
+                        "examples": [
+                            "md"
+                        ]
+                    },
+                    "ocr": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Ocr",
+                        "description": "If enabled, the bitmap content will be processed using OCR. Boolean. Optional, defaults to true",
+                        "default": true,
+                        "examples": [
+                            true
+                        ]
+                    },
+                    "force_ocr": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Force Ocr",
+                        "description": "If enabled, replace any existing text with OCR-generated text over the full content. Boolean. Optional, defaults to false.",
+                        "default": false,
+                        "examples": [
+                            false
+                        ]
+                    },
+                    "ocr_engine": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "pattern": "easyocr|tesseract_cli|tesseract"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Ocr Engine",
+                        "description": "The OCR engine to use. String. Allowed values: easyocr, tesseract_cli, tesseract. Optional, defaults to easyocr.",
+                        "default": "easyocr",
+                        "examples": [
+                            "easyocr"
+                        ]
+                    },
+                    "pdf_backend": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "pattern": "pypdfium2|dlparse_v1|dlparse_v2"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Pdf Backend",
+                        "description": "The PDF backend to use. String. Allowed values: pypdfium2, dlparse_v1, dlparse_v2. Optional, defaults to dlparse_v1.",
+                        "default": "dlparse_v1",
+                        "examples": [
+                            "dlparse_v1"
+                        ]
+                    },
+                    "table_mode": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "pattern": "fast|accurate"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Table Mode",
+                        "description": "Mode to use for table structure, String. Allowed values: fast, accurate. Optional, defaults to fast.",
+                        "default": "fast",
+                        "examples": [
+                            "fast"
+                        ]
+                    },
+                    "abort_on_error": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Abort On Error",
+                        "description": "Abort on error if enabled. Boolean. Optional, defaults to false.",
+                        "default": false,
+                        "examples": [
+                            false
+                        ]
+                    },
+                    "return_as_file": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Return As File",
+                        "description": "Return the output as a zip file (will happen anyway if multiple files are generated). Boolean. Optional, defaults to false.",
+                        "default": false,
+                        "examples": [
+                            false
+                        ]
+                    },
+                    "source": {
+                        "anyOf": [
+                            {
+                                "items": {
+                                    "type": "string"
+                                },
+                                "type": "array"
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ],
+                        "title": "Source",
+                        "description": "Source(s) to process.",
+                        "examples": [
+                            "https://arxiv.org/pdf/2206.01062"
+                        ]
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "source"
+                ],
+                "title": "DoclingParameters"
+            },
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            }
+        },
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "name": "Authorization"
+            }
+        }
+    },
+    "security": [
+        {
+            "BearerAuth": []
+        }
+    ]
+}
