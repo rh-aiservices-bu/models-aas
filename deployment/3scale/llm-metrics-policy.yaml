@@ -1,0 +1,19 @@
+kind: CustomPolicyDefinition
+apiVersion: capabilities.3scale.net/v1beta1
+metadata:
+  name: llm-metrics
+  namespace: 3scale
+spec:
+  name: llm-metrics
+  schema:
+    $schema: 'http://json-schema.org/draft-07/schema#'
+    configuration:
+      properties:
+        someAttr:
+          description: Some attribute
+          type: integer
+      type: object
+    name: LLM Monitor
+    summary: Expose prometheus metrics to monitor LLM token usage
+    version: '0.1'
+  version: '0.1'

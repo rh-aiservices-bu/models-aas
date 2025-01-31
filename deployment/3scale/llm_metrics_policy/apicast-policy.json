@@ -1,0 +1,134 @@
+{
+  "$schema": "http://apicast.io/policy-v1/schema#manifest#",
+  "name": "LLM Monitor",
+  "summary": "Monitor LLM token usage",
+  "description": [
+      "Expose prometheus metrics to monitor LLM token usage"
+  ],
+  "version": "0.1",
+  "configuration": {
+    "definitions": {
+      "operation": {
+        "type": "object",
+        "$id": "#/definitions/operation",
+        "properties": {
+          "left": {
+            "type": "string"
+          },
+          "op": {
+            "description": "Operation to apply. The matches op supports PCRE (Perl compatible regular expressions)",
+            "type": "string",
+            "enum": [
+              "==",
+              "!=",
+              "matches"
+            ]
+          },
+          "right": {
+            "type": "string"
+          },
+          "left_type": {
+            "description": "How to evaluate 'left'",
+            "type": "string",
+            "default": "plain",
+            "oneOf": [
+              {
+                "enum": [
+                  "plain"
+                ],
+                "title": "Evaluate 'left' as plain text."
+              },
+              {
+                "enum": [
+                  "liquid"
+                ],
+                "title": "Evaluate 'left' as liquid."
+              }
+            ]
+          },
+          "right_type": {
+            "description": "How to evaluate 'right'",
+            "type": "string",
+            "default": "plain",
+            "oneOf": [
+              {
+                "enum": [
+                  "plain"
+                ],
+                "title": "Evaluate 'right' as plain text."
+              },
+              {
+                "enum": [
+                  "liquid"
+                ],
+                "title": "Evaluate 'right' as liquid."
+              }
+            ]
+          }
+        },
+        "required": [
+          "left",
+          "op",
+          "right"
+        ]
+      },
+      "custom_metrics_rule": {
+        "type": "object",
+         "required": [ "metric", "condition", "increment" ],
+        "properties": {
+          "metric": {
+            "type": "string",
+            "title": "Metric to increment ",
+            "description": "Metric name to increment in case of condition match (liquid input)",
+            "default": ""
+          },
+          "increment": {
+            "type": "string",
+            "title": "Increment ",
+            "description": "How many hits should be incremented, liquid value ",
+            "default": "1"
+          },
+          "condition": {
+            "type": "object",
+            "title": "Condition",
+            "required": [
+              "combine_op",
+              "operations"
+            ],
+            "properties": {
+              "combine_op": {
+                "title": "Combine operation",
+                "type": "string",
+                "default": "and",
+                "enum": [
+                  "and",
+                  "or"
+                ]
+              },
+              "operations": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/operation"
+                },
+                "minItems": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "properties": {
+      "enable_sse_support": {
+        "description": "Whether to enable support for Server-Sent Events(SSE)",
+        "type": "boolean"
+      },
+      "rules": {
+        "type": "array",
+        "items": {
+            "$ref": "#/definitions/custom_metrics_rule"
+         },
+        "minItems": 1
+      }
+    }
+  }
+}
