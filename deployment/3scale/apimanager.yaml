@@ -14,13 +14,13 @@ spec:
   apicast:
     stagingSpec:
       customPolicies:
-        - name: remove-bearer
+        - name: llm-metrics
           version: "0.1"
           secretRef:
-             name: cp-bearer
+             name: llm-metrics
     productionSpec:
       customPolicies:
-        - name: remove-bearer
+        - name: llm-metrics
           version: "0.1"
           secretRef:
-             name: cp-bearer
+             name: llm-metrics

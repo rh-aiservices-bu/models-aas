@@ -97,32 +97,38 @@ In this example we are using Red Hat SSO as the authentication backend for the 3
 
 - OpenShift Data Foundation deployed to be able to create an RWX volume for 3Scale system storage.
 
-#### Deployment
+#### 3Scale Deployment
+
+We will start by creating the project and setting up the policy artifacts needed for tokens counting with LLMs.
 
 - Create the project `3scale`.
 - Open a Terminal and login to OpenShift.
-- Switch to the folder [deployment/3scale/remove_bearer_policy](./deployment/3scale/remove_bearer_policy/) and run the following command:
+- Switch to the folder [deployment/3scale/llm_metrics_policy](./deployment/3scale/llm_metrics_policy/) and run the following command:
 
     ```bash
-    oc create secret generic cp-bearer \
+    oc create secret generic llm-metrics \
         -n 3scale \
     --from-file=./apicast-policy.json \
+    --from-file=./custom_metrics.lua \
     --from-file=./init.lua \
-    --from-file=./remove-bearer.lua
+    --from-file=./llm.lua \
+    --from-file=./portal_client.lua \
+    --from-file=./response.lua \
+    && oc label secret llm-metrics apimanager.apps.3scale.net/watched-by=apimanager
     ```
 
 - Deploy the Red Hat Integration-3scale operator in the `3scale` namespace only!
+- Using the deployed operator, create a Custom Policy Definition instance using [deployment/3scale/llm-metrics-policy.yaml](./deployment/3scale/llm-metrics-policy.yaml).
 - Using the deployed operator, create an APIManager instance using [deployment/3scale/apimanager.yaml](./deployment/3scale/apimanager.yaml).
 - Wait for all the Deployments (15) to finish.
-- Create a Custom Policy Definition instance using [deployment/3scale/custom_policy_definition.yaml](./deployment/3scale/custom_policy_definition.yaml).
 
 #### Configuration
 
 ##### Base configuration
 
 - Open the 3Scale administration portal for the RHOAI provider. It will be the Route starting with `https://maas-admin-apps...`.
-- The credentails are stored in the Secret `system-seed` (`ADMIN_USER` and `ADMIN_PASSWORD`).
-- You will be greated by the Wizard that you can directly close:
+- The credentials are stored in the Secret `system-seed` (`ADMIN_USER` and `ADMIN_PASSWORD`).
+- You will be greeted by the Wizard that you can directly close:
 
   ![3scale-wizard-close.png](img/3scale-wizard-close.png).
 - In the Account Settings sections (top menu):
@@ -153,7 +159,7 @@ In this example we are using Red Hat SSO as the authentication backend for the 3
 
     ![all-products.png](img/all-products.png)
 - For each product, apply the following configurations:
-  - In `Integration->Settings`, change the `Auth user key` field content to `Authorization` and the `Credentials location` field to `As HTTP Headers` (click on `Update product` at the bottom to save):
+  - In `Integration->Settings`, change the `Auth user key` field content to `Authorization` and the `Credentials location` field to `As HTTP Basic Authentication` (click on `Update product` at the bottom to save):
 
     ![settings-authorization.png](img/settings-authorization.png)
   - Link the corresponding Backend
@@ -162,7 +168,7 @@ In this example we are using Red Hat SSO as the authentication backend for the 3
        1. ALLOW_HEADERS: `Authorization`, `Content-type`, `Accept`.
        2. allow_origine: *
        3. allow_credentials: checked
-    2. Remove Bearer from Authorization Policy
+    2. Optionally LLM Monitor for OpenAI-Compatible token usage. See [Readme](./deployment/3scale/llm_metrics_policy/README.md) for information and configuration.
     3. 3scale APIcast
   - Add the Methods and the corresponding Mapping Rules: create one pair for each API method/path.
 
