@@ -9,11 +9,26 @@ access_token = os.environ.get("ACCESS_TOKEN")
 
 
 def get_accounts():
-    params = {"access_token": access_token}
-    headers = {"accept": "*/*"}
-    api_url = f"{backend_address}/admin/api/accounts.xml"
-    response = requests.get(api_url, params=params, headers=headers)
-    accounts = xmltodict.parse(response.content)
+    accounts = []
+    page = 1
+    while True:
+        params = {"access_token": access_token, "page": page}
+        headers = {"accept": "*/*"}
+        api_url = f"{backend_address}/admin/api/accounts.xml"
+        response = requests.get(api_url, params=params, headers=headers)
+        batch = xmltodict.parse(response.content)
+        if not accounts:
+            accounts = batch
+        else:
+            if isinstance(batch['accounts']['account'], list):
+                accounts['accounts']['account'].extend(batch['accounts']['account'])
+            else:
+                accounts['accounts']['account'].append(batch['accounts']['account'])
+
+        if int(batch['accounts']['@total_pages'])==page:
+            break
+        
+        page += 1
 
     return accounts
 
