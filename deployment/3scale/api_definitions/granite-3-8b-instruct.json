@@ -1,8 +1,8 @@
 {
     "openapi": "3.0.3",
     "info": {
-        "title": "Granite-3.0-8B-Instruct",
-        "description": "Granite-3.0-8B-Instruct is a 8B parameter model finetuned from Granite-3.0-8B-Base using a combination of open source instruction datasets with permissive license and internally collected synthetic datasets. Supported Languages: English, German, Spanish, French, Japanese, Portuguese, Arabic, Czech, Italian, Korean, Dutch, and Chinese. Intended use: The model is designed to respond to general instructions and can be used to build AI assistants for multiple domains, including business applications."
+        "title": "Granite-3.1-8B-Instruct",
+        "description": "Granite-3.1-8B-Instruct is a 8B parameter model finetuned from Granite-3.1-8B-Base using a combination of open source instruction datasets with permissive license and internally collected synthetic datasets. Supported Languages: English, German, Spanish, French, Japanese, Portuguese, Arabic, Czech, Italian, Korean, Dutch, and Chinese. Intended use: The model is designed to respond to general instructions and can be used to build AI assistants for multiple domains, including business applications."
     },
     "paths": {
         "/health": {
