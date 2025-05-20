@@ -1,0 +1,35 @@
+<ul class="nav nav-tabs">
+  {% unless current_account.requires_credit_card_now? %}
+    <li class="{% if urls.account_overview.active? %}active{% endif %}">
+      <a href="{{ urls.account_overview }}">Account Details</a>
+    </li>
+
+    {% if provider.account_management_enabled? %}
+      {% if current_user.admin? %}
+        {% include 'menu_item' with urls.users %}
+      {% endif %}
+
+      {% if provider.multiple_users_allowed? %}
+        {% if current_user.admin? %}
+          {% include 'menu_item' with urls.invitations %}
+        {% endif %}
+      {% endif %}
+    {% endif %}
+
+
+    {% if provider.account_plans_allowed? %}
+      {% include 'menu_item' with urls.account_plans %}
+    {% endif %}
+  {%  endunless %}
+
+  {% if provider.finance_allowed? %}
+    {% unless current_account.requires_credit_card_now? %}
+      {% include 'menu_item' with urls.invoices %}
+    {% endunless %}
+
+    {% if urls.payment_details %}
+      {% include 'menu_item' with urls.payment_details %}
+    {% endif %}
+  {% endif %}
+
+</ul>

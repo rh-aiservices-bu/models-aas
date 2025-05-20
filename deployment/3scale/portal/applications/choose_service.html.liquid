@@ -1,0 +1,12 @@
+<h2>Select service</h2>
+<p>In order to create an application, select one of the followig services.</p>
+
+<dl class="select-service-list">
+  {% assign sorted_services = services | sort: 'system_name' %}
+  {% for service in sorted_services %}
+    <dt class="service">
+      <a href="{{ urls.new_application }}?service_id={{ service.system_name }}" class="" style="color:rgba(0, 0, 255, 0.8)!important;text-decoration:underline">{{ service.name }}</a>
+    </dt>
+    <dd>{{ service.description }}</dd>
+  {% endfor %}
+</dl>
