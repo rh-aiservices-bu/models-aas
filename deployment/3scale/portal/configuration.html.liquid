@@ -1,0 +1,114 @@
+{% disable_client_cache %}
+
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  }
+
+  th, td {
+    padding: 8px;
+    border: 1px solid #888;
+  }
+
+  th {
+    background-color: #f4f4f4;
+  }
+
+  /* Allow first column to shrink */
+  th:first-child, td:first-child {
+    text-align: left;
+    white-space: normal;  /* Allow wrapping in the first column */
+  }
+
+  /* Prevent wrapping in other columns */
+  th:not(:first-child), td:not(:first-child) {
+    text-align: right;
+    white-space: nowrap; /* Prevents wrapping */
+  }
+</style>
+
+<h1>Model Servers configuration</h1>
+
+<table>
+  <tr>
+    <th>Model name</th>
+    <th>Model size</th>
+    <th>Max tokens</th>
+    <th>GPU type</th>
+    <th>VRAM consumed</th>
+    <th>Function calling?</th>
+  </tr>
+  <tr>
+    <td>Granite-3.1-8B-Instruct</td>
+    <td>8B</td>
+    <td>22k</td>
+    <td>A10G</td>
+    <td>22 GB</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Granite-3.1-8B-Instruct-W4A16</td>
+    <td>8B (Compressed)</td>
+    <td>40k</td>
+    <td>A10G</td>
+    <td>20 GB</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Mistral-7B-Instruct-v0.3</td>
+    <td>7B</td>
+    <td>6144</td>
+    <td>A10G</td>
+    <td>22 GB</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>DeepSeek-R1-Distill-Qwen-14B</td>
+    <td>14B</td>
+    <td>50k</td>
+    <td>L40</td>
+    <td>41 GB</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>DeepSeek-R1-Distill-Qwen-14B-W4A16</td>
+    <td>14B (Compressed)</td>
+    <td>40k</td>
+    <td>A10G</td>
+    <td>20 GB</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Llama-3.1-8B-Instruct</td>
+    <td>8B</td>
+    <td>6144</td>
+    <td>A10G</td>
+    <td>20 GB</td>
+    <td>Yes</td>
+  </tr>
+  <tr>
+    <td>Microsoft Phi-4</td>
+    <td>14B</td>
+    <td>128k</td>
+    <td>L40</td>
+    <td>39 GB</td>
+    <td>No</td>
+  </tr>
+  <tr>
+    <td>Nomic-embed-text-v1.5 (4 workers in parallel)</td>
+    <td>137M</td>
+    <td>8192</td>
+    <td>T4</td>
+    <td>15 GB</td>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <td>Granite-Embedding-278m-multilingual</td>
+    <td>278M</td>
+    <td>514</td>
+    <td>T4</td>
+    <td>1 GB</td>
+    <td>N/A</td>
+  </tr>
+</table>

@@ -1,9 +1,7 @@
 html {
   height: 100%;
-  background: radial-gradient(#fff 3px, transparent 5px, #fff 7px, transparent 9px, #fff 11px, transparent 13px, #fff 15px, transparent 17px, #fff 19px, transparent 21px, #fff 23px, transparent 25px, #fff 27px, transparent 29px, #fff 31px, transparent 33px);
   background-color: #111;
   color: white;
-  background-size: 30px 30px;
 }
 
 body {

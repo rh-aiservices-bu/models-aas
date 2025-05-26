@@ -204,7 +204,19 @@ We will start by creating the project and setting up the policy artifacts needed
 
 ##### Portal content
 
-- Go to Developer Portal->Content.
-- From the [deployment/3scale/portal](./deployment/3scale/portal/) folder, apply all the modifications to the different pages and Publish them.
-- The content of this folder is arranged following the same organization of the site.
-- New Pages may have to be created with the type depending of the type of content (html, javascript, css), some others have only to be modified.
+This implementation of Models as a Service requires some customization of the Developer Portal, for example to be able to display the endpoint URLs or the model name to use, not only the API key. Also, some additional pages have been added to the portal, like configuration information or usage examples. Those modifications usually additional or modified resources like images, css and HTML snippets that should be uploaded for this purpose.
+
+To automate the process, we are using the unofficial 3scale CMS CLI to apply the configuration that has been exported in [deployment/3scale/portal](deployment/3scale/portal).
+
+As the access to the 3scale Admin REST APIs is protected, we need to get an access-token as well as the host first
+```bash
+export ACCESS_TOKEN=`oc get secret system-seed -o json -n 3scale | jq -r '.data.ADMIN_ACCESS_TOKEN' | base64 -d`
+export ADMIN_HOST=`oc get route -n 3scale | grep maas-admin | awk '{print $2}'`
+```
+For convenience we set an alias first and then launch the 3scale CMS tool
+```bash
+alias cms='podman run --userns=keep-id:uid=185 -it --rm -v ./deployment/3scale/portal:/cms:Z ghcr.io/fwmotion/3scale-cms:latest'
+cms -k --access-token=${ACCESS_TOKEN} ${ACCESS_TOKEN} https://${ADMIN_HOST}/ upload -u
+```
+
+There is also a download option in case you want to do changes manually on the 3scale CMS.
