@@ -204,9 +204,9 @@ We will start by creating the project and setting up the policy artifacts needed
 
 ##### Portal content
 
-Parasol AI Studio requires a Customized Developer Portal. Usually there are some resources like images, css and HTML snippets that should be uploaded for this pupose.
+This implementation of Models as a Service requires some customization of the Developer Portal, for example to be able to display the endpoint URLs or the model name to use, not only the API key. Also, some additional pages have been added to the portal, like configuration information or usage examples. Those modifications usually additional or modified resources like images, css and HTML snippets that should be uploaded for this purpose.
 
-To automate the process, we are using the unofficial 3scale CMS CLI.
+To automate the process, we are using the unofficial 3scale CMS CLI to apply the configuration that has been exported in [deployment/3scale/portal](deployment/3scale/portal).
 
 As the access to the 3scale Admin REST APIs is protected, we need to get an access-token as well as the host first
 ```bash
