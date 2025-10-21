@@ -1,3 +1,5 @@
+Do you want to try a newer experience? Head for the [LiteMaaS repo](https://github.com/rh-aiservices-bu/litemaas)!
+
 # Models as a Service
 
 This repository features an example of how you can set up 3scale and Red Hat SSO in front of models served by OpenShift AI to offer your users a portal through which they can register and get access keys to the models' endpoints.
